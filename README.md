@@ -4,7 +4,7 @@ A database application for managing Sitka courses.
 #### Goals
 As outlined in my project proposal, my goal here was to create a database application where you can add and organize activities, lessons, and courses. I have completed all those goals.
 
-## Demo Video
+## Presentation and Demo Video
 https://www.youtube.com/watch?v=fF1VPekre8k
 
 ## Database Scripts
