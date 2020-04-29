@@ -1,0 +1,37 @@
+@page
+@model kodiak.Pages.kodiakDB.lessonContent.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>LessonContent</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LessonContent.Position)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LessonContent.Position)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LessonContent.Activity)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LessonContent.Activity.ActivityTypeId)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LessonContent.Lesson)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LessonContent.Lesson.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-page="./Index">Back to List</a>
+</div>

@@ -1,0 +1,237 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Editor";
+}
+
+<style>
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.5fr;
+  grid-template-rows: 0.2fr 1fr 1fr;
+  gap: 0.5em 0.5em;
+  grid-template-areas: "courseHeaderBox lessonHeaderBox activityHeaderBox" "courseContentBox lessonContentBox activityContentBox" "includesEditBox includesEditBox includesEditBox";
+  height:80vh;
+}
+
+.courseHeaderBox { grid-area: courseHeaderBox; }
+.courseContentBox { grid-area: courseContentBox; overflow:auto;}
+.lessonHeaderBox { grid-area: lessonHeaderBox; }
+.lessonContentBox { grid-area: lessonContentBox; overflow:auto;}
+.activityHeaderBox { grid-area: activityHeaderBox; }
+.activityContentBox { grid-area: activityContentBox; overflow:auto;}
+.includesEditBox { grid-area: includesEditBox; overflow:auto;}
+
+table {
+    width: 100%;
+  table-layout: fixed;
+}
+.table-borderless td, .table-borderless th {
+    border: 0;
+}
+
+.svgButton{
+    float:right;
+    border: none;
+    text-decoration: none;
+    background: none;
+    font-size: 1rem;
+    cursor: pointer;
+
+}
+.svgButton img{
+    width:20px;
+}
+.form-control{
+    margin-right:0.5rem;
+}
+.bs-callout {
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+    width:100%;
+}
+.bs-callout-info {
+    border-left-color: #1b809e;
+}
+
+</style>
+<div class="grid-container ">
+    <div class="courseHeaderBox"><h4>Courses</h4>
+    <form method="post" class = "form-inline"><div class="form-group">
+        <input type="hidden" name = "tableName" value = "Course" />
+        <input type="hidden" name = "actionType" value= "AddCourseLesson" />
+        <input type="text" name = "idValue" class="form-control" placeholder="Course Name" maxlength="50">
+        <button type = "submit" type="button" class="btn btn-primary">Add</button>
+    </div></form>
+    </div>
+    <div class="courseContentBox bs-callout">
+        <table class = "table table-borderless">
+            <thead><tr><th>Name</th></tr></thead>
+            <tbody>
+            @foreach (var item in Model.CourseList) {
+                <tr><td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td><td>
+                    <form method="post">
+                        <input type="hidden" name = "tableName" value = "Course" />
+                        <input type="hidden" name = "idValue" value = @item.CourseId />
+                        <input type="hidden" name = "actionType" value= "Delete" />
+                        <button type="submit" class = "svgButton"><img src="deleteIcon.svg" alt="Delete Course" /></button>
+                    </form>
+                    <a asp-page="./kodiakDB/course/Edit" asp-route-id="@item.CourseId"><button type="submit" class = "svgButton"><img src="editIcon.svg" alt="Edit Course" /></button></a>
+                    <form method="get">
+                        <input type="hidden" name = "tableName" value = "Course" />
+                        <input type="hidden" name = "idValue" value = @item.CourseId />
+                        <input type="hidden" name = "actionType" value= "Includes" />
+                        <button type="submit" class = "svgButton"><img src="burgerIcon.svg" alt="Edit Inclusions" /></button>
+                    </form>
+                </td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <div class="lessonHeaderBox"><h4>Lessons</h4>
+    <form method="post" class="form-inline" > 
+        <input type="hidden" name = "tableName" value = "Lesson" />
+        <input type="hidden" name = "actionType" value= "AddCourseLesson" />
+        <input type="text" name = "idValue" class="form-control" placeholder="Lesson Name" maxlength="50">
+        <button type = "submit" type="button" class="btn btn-primary">Add</button>
+    </form>
+    </div>
+    <div class="lessonContentBox bs-callout">
+        <table class = "table table-borderless">
+            <thead><tr><th>Name</th></tr></thead>
+            <tbody>
+            @foreach (var item in Model.LessonList) {
+                <tr><td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td><td>
+                    <form method="post">
+                        <input type="hidden" name = "tableName" value = "Lesson" />
+                        <input type="hidden" name = "idValue" value = @item.LessonId />
+                        <input type="hidden" name = "actionType" value= "Delete" />
+                        <button type="submit" class = "svgButton"><img src="deleteIcon.svg" alt="Delete Lesson" /></button>
+                    </form>
+                    <a asp-page="./kodiakDB/lesson/Edit" asp-route-id="@item.LessonId"><button type="submit" class = "svgButton"><img src="editIcon.svg" alt="Edit Lesson" /></button></a>
+                    <form method="get">
+                        <input type="hidden" name = "tableName" value = "Lesson" />
+                        <input type="hidden" name = "idValue" value = @item.LessonId />
+                        <input type="hidden" name = "actionType" value= "Includes" />
+                        <button type="submit" class = "svgButton"><img src="burgerIcon.svg" alt="Edit Inclusions" /></button>
+                    </form>
+                </td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <div class="activityHeaderBox"><h4>Activities</h4>
+    <form method="post" class="form-inline"> 
+        <input type="hidden" name = "actionType" value= "AddActivity" />
+        <input type="text" name = "Name" class="form-control" placeholder="Activity Name" maxlength="50">
+        <select name="TypeID" class="form-control"><option value="prompt">prompt</option><option value="javascript">Javascript</option></select>
+        <button type = "submit" type="button" class="btn btn-primary">Add</button>
+    </form>
+    </div>
+    <div class="activityContentBox bs-callout">
+        <table class = "table table-borderless">
+            <thead><tr><th>Name</th><th>Type</th></tr></thead>
+            <tbody>
+            @foreach (var item in Model.ActivityList) {
+                <tr><td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td><td>
+                    @Html.DisplayFor(modelItem => item.ActivityTypeId)
+                </td><td>
+                    <form method="post">
+                        <input type="hidden" name = "tableName" value = "Activity" />
+                        <input type="hidden" name = "idValue" value = @item.ActivityId />
+                        <input type="hidden" name = "actionType" value= "Delete" />
+                        <button type="submit" class = "svgButton"><img src="deleteIcon.svg" alt="Delete Activity" /></button>
+                    </form>
+                    <a asp-page="./kodiakDB/activity/Edit" asp-route-id="@item.ActivityId"><button type="submit" class = "svgButton"><img src="editIcon.svg" alt="Edit Activity" /></button></a>
+
+                    
+                </td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <div class="includesEditBox">
+    <h4>Inclusion Editor</h4>
+    <div class = "bs-callout bs-callout-info">
+    
+    @if(Model.lastClickedTable == "Course")
+    {
+        
+        <p>Course Name: <b>@Html.DisplayFor(modelItem => Model.CourseItem.Name)</b></p>
+        <form method="post" class="form-inline"> 
+        <input type="hidden" name = "actionType" value= "AddLessonToCourse" />
+        <input type="hidden" name = "CourseID" value= "@Model.CourseItem.CourseId" />
+        <select name="LessonID" class="form-control">
+            @foreach (var item in Model.LessonList) {
+                <option value="@item.LessonId">@Html.DisplayFor(modelItem => item.Name)</option>
+            }
+        </select>
+        <button type = "submit" type="button" class="btn btn-primary">Add</button>
+        </form>
+
+        <table class = "table table-borderless">
+            <thead><tr><th>Position</th><th>Lesson Name</th></tr></thead>
+            <tbody>
+            @foreach (var item in Model.CourseLessons) {
+                <tr><td>
+                    @Html.DisplayFor(modelItem => item.position)
+                </td><td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td><td>
+                    <form method="post">
+                        <input type="hidden" name = "lessonID" value = @item.lessonID />
+                        <input type="hidden" name = "courseID" value = @item.courseID />
+                        <input type="hidden" name = "actionType" value= "DeleteCourseContent" />
+                        <button type="submit" class = "svgButton"><img src="deleteIcon.svg" alt="Remove Lesson From Course" /></button>
+                    </form>
+                </td></tr>
+            }
+            </tbody>
+        </table>
+    }
+    @if(Model.lastClickedTable == "Lesson")
+    {
+        <p>Lesson Name: <b>@Html.DisplayFor(modelItem => Model.LessonItem.Name)</b></p>
+        <form method="post" class="form-inline"> 
+        <input type="hidden" name = "actionType" value= "AddActivityToLesson" />
+        <input type="hidden" name = "LessonID" value= "@Model.LessonItem.LessonId" />
+        <select name="ActivityID" class="form-control">
+            @foreach (var item in Model.ActivityList) {
+                <option value="@item.ActivityId">@Html.DisplayFor(modelItem => item.Name)</option>
+            }
+        </select>
+        <button type = "submit" type="button" class="btn btn-primary">Add</button>
+        </form>
+
+        <table class = "table table-borderless">
+            <thead><tr><th>Position</th><th>Activity Name</th></tr></thead>
+            <tbody>
+            @foreach (var item in Model.LessonActivities) {
+                <tr><td>
+                    @Html.DisplayFor(modelItem => item.position)
+                </td><td>
+                    @Html.DisplayFor(modelItem => item.name)
+                </td><td>
+                    <form method="post">
+                        <input type="hidden" name = "lessonID" value = @item.lessonID />
+                        <input type="hidden" name = "activityID" value = @item.activityID />
+                        <input type="hidden" name = "actionType" value= "DeleteLessonContent" />
+                        <button type="submit" class = "svgButton"><img src="deleteIcon.svg" alt="Remove Activity From Lesson" /></button>
+                    </form>
+                </td></tr>
+            }
+            </tbody>
+        </table>
+    }
+    </div>
+    </div>
+</div>
