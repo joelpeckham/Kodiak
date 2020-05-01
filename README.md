@@ -14,3 +14,4 @@ The point is to use this application to create the rest of the data.
 
 ## Database Diagram
 Check out diagram.png
+![Sitka Database Diagram](http://raw.githubusercontent.com/joelpeckham/Kodiak/master/diagram.png)
